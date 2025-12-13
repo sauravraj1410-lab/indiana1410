@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI BIHARI</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'chatbot/css/styles.css' %}">
+</head>
+<body>
+
+<div class="menu-button" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</div>
+
+<div class="dark-toggle-btn" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+</div>
+
+<div class="new-chat-btn" onclick="startNewChat()">
+    <i class="fas fa-plus"></i>
+</div>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>AI Bihari</h1>
+            <p>Smart AI with a Bihari Heart ❤️</p>
+        </div>
+        <div class="chat-history"></div>
+    </aside>
+
+    <!-- CHAT -->
+    <main class="chat-container">
+        <header class="chat-header">
+            <i class="fas fa-robot"></i>
+            <h2>AI Bihari</h2>
+        </header>
+
+        <section class="chat-messages" id="chat-messages">
+            <div class="bot-message message">
+                <div class="message-content">
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-text">
+                        Hello! How can I help you today?
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="chat-input-container">
+            <form id="chat-form">
+                <div class="input-wrapper">
+                    <input id="user-input" type="text" placeholder="Message AI Bihari..." required />
+                    <button id="send-button" type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+</div>
+
+<script src="{% static 'chatbot/js/script.js' %}"></script>
+</body>
+</html>
