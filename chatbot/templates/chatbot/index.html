@@ -71,7 +71,13 @@
         <div class="chat-input-container">
             <form id="chat-form">
                 <div class="input-wrapper">
-                    <input id="user-input" type="text" placeholder="Message AI Bihari..." required>
+                    <input
+                        id="user-input"
+                        type="text"
+                        placeholder="Message AI Bihari..."
+                        required
+                        autocomplete="off"
+                    >
                     <button id="send-button" type="submit">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -85,18 +91,19 @@
 <!-- App JS -->
 <script src="{% static 'chatbot/js/script.js' %}"></script>
 
-<!-- SERVICE WORKER REGISTRATION -->
+<!-- SERVICE WORKER REGISTRATION (SAFE, NO RELOAD) -->
 <script>
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("{% static 'service-worker.js' %}")
-      .then(reg => {
-        console.log("Service Worker registered", reg);
-      })
-      .catch(err => {
-        console.error("SW registration failed", err);
-      });
-  });
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("{% static 'service-worker.js' %}")
+            .then(reg => {
+                console.log("✅ Service Worker registered:", reg.scope);
+            })
+            .catch(err => {
+                console.error("❌ Service Worker error:", err);
+            });
+    });
 }
 </script>
 
