@@ -6,4 +6,6 @@ self.addEventListener("activate", event => {
   event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener("fetch", () => {});
+self.addEventListener("fetch", event => {
+  // no caching yet (stable)
+});
