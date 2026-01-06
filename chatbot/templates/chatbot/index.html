@@ -35,11 +35,13 @@
         }
     </style>
 
-    <script>
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/static/sw.js");
-    }
-    </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/static/sw.js", { scope: "/" });
+  });
+}
+</script>
 </head>
 <body>
 
