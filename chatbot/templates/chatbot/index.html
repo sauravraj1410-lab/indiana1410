@@ -88,12 +88,19 @@
 <!-- SERVICE WORKER REGISTRATION -->
 <script>
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        navigator.serviceWorker
-            .register("{% static 'service-worker.js' %}")
-            .then(() => console.log("✅ Service Worker registered"))
-            .catch(err => console.error("❌ SW failed:", err));
-    });
+  window.addEventListener("load", async () => {
+    try {
+      const reg = await navigator.serviceWorker.register("{% static 'service-worker.js' %}");
+      console.log("SW registered:", reg);
+
+      // force reload once so SW controls page
+      if (!navigator.serviceWorker.controller) {
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error("SW error", e);
+    }
+  });
 }
 </script>
 
