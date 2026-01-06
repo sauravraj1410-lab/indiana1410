@@ -34,8 +34,13 @@
             z-index: 9999;
         }
     </style>
-</head>
 
+    <script>
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/static/sw.js");
+    }
+    </script>
+</head>
 <body>
 
 <!-- SPLASH -->
