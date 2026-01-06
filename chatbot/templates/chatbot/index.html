@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- IMPORTANT for PWA -->
+    <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <!-- PWA Meta -->
     <meta name="theme-color" content="#0d6efd">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
 
     <title>❤️‍🔥 AI BIHARI ❤️‍🔥</title>
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="{% static 'manifest.json' %}">
-
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- App CSS -->
     <link rel="stylesheet" href="{% static 'chatbot/css/styles.css' %}">
@@ -36,7 +36,7 @@
     <i class="fas fa-plus"></i>
 </div>
 
-<!-- APP -->
+<!-- APP CONTAINER -->
 <div class="app-container">
 
     <!-- SIDEBAR -->
@@ -48,7 +48,7 @@
         <div class="chat-history"></div>
     </aside>
 
-    <!-- CHAT AREA -->
+    <!-- CHAT -->
     <main class="chat-container">
         <header class="chat-header">
             <i class="fas fa-robot"></i>
@@ -71,7 +71,7 @@
         <div class="chat-input-container">
             <form id="chat-form">
                 <div class="input-wrapper">
-                    <input id="user-input" type="text" placeholder="Message AI Bihari..." required />
+                    <input id="user-input" type="text" placeholder="Message AI Bihari..." required>
                     <button id="send-button" type="submit">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -85,17 +85,17 @@
 <!-- App JS -->
 <script src="{% static 'chatbot/js/script.js' %}"></script>
 
-<!-- SERVICE WORKER (PWA CORE) -->
+<!-- SERVICE WORKER REGISTRATION -->
 <script>
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("{% static 'service-worker.js' %}")
-        .then(() => console.log("✅ Service Worker Registered"))
-        .catch(err => console.error("❌ Service Worker Error:", err));
+    window.addEventListener("load", function () {
+        navigator.serviceWorker
+            .register("{% static 'service-worker.js' %}")
+            .then(() => console.log("✅ Service Worker registered"))
+            .catch(err => console.error("❌ SW failed:", err));
     });
 }
 </script>
 
 </body>
 </html>
-
