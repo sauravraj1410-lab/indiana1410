@@ -3,15 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>🤖 AI Bihari</title>
 
     <!-- Viewport -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- PWA -->
+    <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#0d6efd">
-    <link rel="manifest" href="{% static 'manifest.json' %}">
-
-    <title>❤️‍🔥 AI BIHARI ❤️‍🔥</title>
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -19,30 +18,30 @@
 
     <!-- App CSS -->
     <link rel="stylesheet" href="{% static 'chatbot/css/styles.css' %}">
+
+    <style>
+        /* ===== SPLASH ===== */
+        .splash {
+            position: fixed;
+            inset: 0;
+            background: #0d6efd;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 600;
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- INSTALL APP BUTTON -->
-<button id="installBtn" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-  padding: 12px 20px;
-  border-radius: 30px;
-  border: none;
-  background: #0d6efd;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  display: none;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-">
-  📲 Install App
-</button>
+<!-- SPLASH -->
+<div class="splash" id="splash">🤖 AI Bihari</div>
 
-<!-- UI Buttons -->
+<!-- UI BUTTONS -->
 <div class="menu-button" onclick="toggleSidebar()">
     <i class="fas fa-bars"></i>
 </div>
@@ -110,46 +109,19 @@
 <!-- App JS -->
 <script src="{% static 'chatbot/js/script.js' %}"></script>
 
-<!-- SERVICE WORKER -->
+<!-- SPLASH LOGIC -->
 <script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("{% static 'service-worker.js' %}")
-            .then(reg => console.log("Service Worker registered:", reg.scope))
-            .catch(err => console.error("SW error:", err));
-    });
-}
+setTimeout(() => {
+    const splash = document.getElementById("splash");
+    if (splash) splash.style.display = "none";
+}, 1200);
 </script>
 
-<!-- INSTALL LOGIC (GUARANTEED) -->
+<!-- SERVICE WORKER (SAME SIMPLE STYLE AS IS21) -->
 <script>
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
-
-window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = "block";
-});
-
-installBtn.addEventListener("click", async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const result = await deferredPrompt.userChoice;
-
-    if (result.outcome === "accepted") {
-        console.log("App installed");
-    }
-
-    deferredPrompt = null;
-    installBtn.style.display = "none";
-});
-
-window.addEventListener("appinstalled", () => {
-    console.log("PWA installed");
-    installBtn.style.display = "none";
-});
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/sw.js");
+}
 </script>
 
 </body>
