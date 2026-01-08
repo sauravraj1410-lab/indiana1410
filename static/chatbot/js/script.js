@@ -47,13 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
             lowerMsg.includes("who made you") ||
             lowerMsg.includes("who created you") ||
             lowerMsg.includes("your creator") ||
-            lowerMsg.includes("who is your developer")
-            lowerMsg.includes("who create you")
-            lowerMsg.includes("who  creates you")
-            lowerMsg.includes("Tumko kaun banaya")
-            lowerMsg.includes("who is your owner")
-            lowerMsg.includes("Name your owner")
-            
+            lowerMsg.includes("who is your developer") ||
+            lowerMsg.includes("who create you") ||
+            lowerMsg.includes("who  creates you") ||
+            lowerMsg.includes("tumko kaun banaya") ||
+            lowerMsg.includes("who is your owner") ||
+            lowerMsg.includes("name your owner")
         ) {
             addMessage(
                 "bot",
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (
             lowerMsg.includes("who is saurav") ||
             lowerMsg.includes("tell me about saurav") ||
-            lowerMsg.includes("about your creator")
+            lowerMsg.includes("about your creator") ||
             lowerMsg.includes("ye saurav kaun hai")
         ) {
             addMessage(
@@ -103,16 +102,17 @@ Friend: Rishi`
             );
             return;
         }
-        if(
-           lowerMsg.includes("who is rishi")||
-           lowerMsg.includes("rishi kaun hai")
+
+        if (
+            lowerMsg.includes("who is rishi") ||
+            lowerMsg.includes("rishi kaun hai")
         ) {
-             addMessage(
+            addMessage(
                 "bot",
-                'Rishi is a small boy of palaki sultani.And he but once big six in saurav ball which he remember at last of his life.'
-               );
-               return;
-            }
+                "Rishi is a small boy of palaki sultani.And he but once big six in saurav ball which he remember at last of his life."
+            );
+            return;
+        }
 
         /* ------------------------------------------------ */
         /*              NORMAL AI FLOW                     */
