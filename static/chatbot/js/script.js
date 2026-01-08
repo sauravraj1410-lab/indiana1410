@@ -109,10 +109,10 @@ Friend: Rishi`
         ) {
              addMessage(
                 "bot",
-                'Rishi is a small boy of palaki sultani.And he but once big six in saurav ball which he remember at last of his life's
+                'Rishi is a small boy of palaki sultani.And he but once big six in saurav ball which he remember at last of his life.'
                );
                return;
-        }
+            }
 
         /* ------------------------------------------------ */
         /*              NORMAL AI FLOW                     */
