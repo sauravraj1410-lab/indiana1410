@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
             lowerMsg.includes("who created you") ||
             lowerMsg.includes("your creator") ||
             lowerMsg.includes("who is your developer")
+            lowerMsg.includes("whi create you")
+            lowerMsg.includes("who  creates you")
+            lowerMsg.includes("Tumko kaun banaya")
+            lowerMsg.includes("who is your owner")
+            lowerMsg.includes("Name your owner")
+            
         ) {
             addMessage(
                 "bot",
@@ -61,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lowerMsg.includes("who is saurav") ||
             lowerMsg.includes("tell me about saurav") ||
             lowerMsg.includes("about your creator")
+            lowerMsg.includes("ye saurav kaun hai")
         ) {
             addMessage(
                 "bot",
