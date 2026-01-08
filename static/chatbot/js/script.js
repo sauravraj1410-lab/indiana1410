@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lowerMsg.includes("who created you") ||
             lowerMsg.includes("your creator") ||
             lowerMsg.includes("who is your developer")
-            lowerMsg.includes("whi create you")
+            lowerMsg.includes("who create you")
             lowerMsg.includes("who  creates you")
             lowerMsg.includes("Tumko kaun banaya")
             lowerMsg.includes("who is your owner")
