@@ -34,26 +34,39 @@
             z-index: 9999;
         }
 
-        /* ===== SUGGESTED QUESTIONS ===== */
-        .suggested-questions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-
-        .question-chip {
-            padding: 6px 12px;
-            border-radius: 18px;
-            background: #f1f3f5;
-            font-size: 13px;
+        /* ===== LIKE BUTTON ===== */
+        .like-btn {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #dc3545;
             cursor: pointer;
-            border: 1px solid #ddd;
-            transition: background 0.2s ease;
+            user-select: none;
         }
 
-        .question-chip:hover {
-            background: #e7f1ff;
+        .like-btn.liked {
+            color: #198754;
+            font-weight: 500;
+        }
+
+        /* ===== FEEDBACK TOAST (ChatGPT style) ===== */
+        .feedback-toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+        }
+
+        .feedback-toast.show {
+            opacity: 1;
         }
     </style>
 
@@ -69,6 +82,11 @@
 
 <!-- SPLASH -->
 <div class="splash" id="splash">🤖 AI Bihari</div>
+
+<!-- FEEDBACK TOAST -->
+<div class="feedback-toast" id="feedbackToast">
+    Thanks for your feedback ❤️
+</div>
 
 <!-- APP -->
 <div class="app-container">
@@ -97,23 +115,9 @@
                     </div>
                     <div class="message-text">
                         Hello! 🥰 How can I help you today?
-
-                        <!-- SUGGESTED QUESTIONS -->
-                        <div class="suggested-questions">
-                            <div class="question-chip" onclick="sendQuickQuestion('Who made you?')">
-                                Who made you?
-                            </div>
-                            <div class="question-chip" onclick="sendQuickQuestion('What is AI Bihari?')">
-                                What is AI Bihari?
-                            </div>
-                            <div class="question-chip" onclick="sendQuickQuestion('What can AI Bihari do?')">
-                                What can AI Bihari do?
-                            </div>
-                            <div class="question-chip" onclick="sendQuickQuestion('Is AI Bihari free?')">
-                                Is AI Bihari free?
-                            </div>
+                        <div class="like-btn" onclick="handleLike(this)">
+                            <i class="fas fa-heart"></i> Like
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -142,14 +146,20 @@
 <!-- App JS -->
 <script src="{% static 'chatbot/js/script.js' %}"></script>
 
-<!-- QUICK QUESTION LOGIC -->
+<!-- FEEDBACK LOGIC -->
 <script>
-function sendQuickQuestion(text) {
-    const input = document.getElementById("user-input");
-    const form = document.getElementById("chat-form");
+function handleLike(el) {
+    if (el.classList.contains("liked")) return;
 
-    input.value = text;
-    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    el.classList.add("liked");
+    el.innerHTML = '<i class="fas fa-heart"></i> Liked';
+
+    const toast = document.getElementById("feedbackToast");
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 1800);
 }
 </script>
 
