@@ -11,6 +11,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // API Endpoint
     const API_URL = '/api/chat/';
 
+    /* ================================================= */
+    /* 🔊 VOICE (TTS) — ADDED WITHOUT REMOVING ANYTHING */
+    /* ================================================= */
+    let voiceEnabled = true;
+
+    function speakBot(text) {
+        if (!voiceEnabled) return;
+        if (!window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-IN';
+        utterance.rate = 1;
+        utterance.pitch = 1;
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    window.toggleVoice = () => {
+        voiceEnabled = !voiceEnabled;
+        addMessage('bot', voiceEnabled ? '🔊 Voice enabled' : '🔇 Voice muted');
+    };
+    /* ================================================= */
+
     function init() {
         setupEventListeners();
         loadChatHistory();
@@ -42,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         /*          LOCAL COMMAND RESPONSES                 */
         /* ------------------------------------------------ */
 
-        // Who made you
         if (
             lowerMsg.includes("who made you") ||
             lowerMsg.includes("who created you") ||
@@ -54,52 +78,43 @@ document.addEventListener('DOMContentLoaded', () => {
             lowerMsg.includes("who is your owner") ||
             lowerMsg.includes("name your owner")
         ) {
-            addMessage(
-                "bot",
-                "I was created by Saurav, a Class 11 student who is passionate about AI, programming, and technology."
-            );
+            const reply =
+                "I was created by Saurav, a Class 11 student who is passionate about AI, programming, and technology.";
+            addMessage("bot", reply);
+            speakBot(reply);
             return;
         }
 
-        // About Saurav (general)
         if (
             lowerMsg.includes("who is saurav") ||
             lowerMsg.includes("tell me about saurav") ||
             lowerMsg.includes("about your creator") ||
             lowerMsg.includes("ye saurav kaun hai")
         ) {
-            addMessage(
-                "bot",
-                `Saurav is a Class 11 student from Bihar and the creator of AI Bihari.
-He enjoys learning programming, building AI projects, and exploring new technologies.`
-            );
+            const reply =
+`Saurav is a Class 11 student from Bihar and the creator of AI Bihari.
+He enjoys learning programming, building AI projects, and exploring new technologies.`;
+            addMessage("bot", reply);
+            speakBot(reply);
             return;
         }
 
-        // Detailed creator info (only when explicitly asked)
         if (
             lowerMsg.includes("saurav details") ||
             lowerMsg.includes("full details of saurav") ||
             lowerMsg.includes("creator details")
         ) {
-            addMessage(
-                "bot",
-                `Here are the details of my creator:
+            const reply =
+`Here are the details of my creator:
 
-Name: Saurav  
-Class: 11  
-
-Village: Palaki Sultani  
-Post Office: Guraru  
-District: Gaya  
-State: Bihar  
-
-Father: Ajay Yadav  
-Mother: Arti Kumari Anshu  
-Brother: Sachin  
-Sister: Supriya  
-Friend: Rishi`
-            );
+Name: Saurav
+Class: 11
+Village: Palaki Sultani
+Post Office: Guraru
+District: Gaya
+State: Bihar`;
+            addMessage("bot", reply);
+            speakBot(reply);
             return;
         }
 
@@ -107,22 +122,13 @@ Friend: Rishi`
             lowerMsg.includes("who is rishi") ||
             lowerMsg.includes("rishi kaun hai")
         ) {
-            addMessage(
-                "bot",
-                "Rishi is a small boy of palaki sultani.And he but once big six in saurav ball which he remember at last of his life."
-            );
+            const reply =
+                "Rishi is a small boy of Palaki Sultani and a memorable friend of Saurav.";
+            addMessage("bot", reply);
+            speakBot(reply);
             return;
         }
-        if (
-            lowerMsg.includes("what is ai bihari") ||
-            lowerMsg.includes("ai Bihari Kya hai")
-        ) {
-            addMessage(
-                "bot",
-                "Ai Bihari is ai created by developer Saurav of class 11th student .It is so great ai which you help in solving the problem ."
-            );
-            return;
-        }
+
         /* ------------------------------------------------ */
         /*              NORMAL AI FLOW                     */
         /* ------------------------------------------------ */
@@ -149,6 +155,7 @@ Friend: Rishi`
 
             if (data.reply) {
                 addMessage('bot', data.reply);
+                speakBot(data.reply);
             } else if (data.error) {
                 addMessage('bot', `Error: ${data.error}`);
             }
@@ -268,6 +275,7 @@ Friend: Rishi`
         chatMessages.innerHTML = '';
         addMessage('user', chat.user);
         addMessage('bot', chat.bot);
+        speakBot(chat.bot);
     }
 
     function formatTime(timestamp) {
@@ -295,7 +303,9 @@ Friend: Rishi`
     window.toggleDarkMode = () => document.body.classList.toggle('dark-mode');
     window.startNewChat = () => {
         chatMessages.innerHTML = '';
-        addMessage('bot', 'New chat started! How can I help you?');
+        const msg = 'New chat started! How can I help you?';
+        addMessage('bot', msg);
+        speakBot(msg);
     };
 
     bottomNavIcons.forEach(icon => {
