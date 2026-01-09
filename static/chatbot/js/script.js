@@ -1,117 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
-    /* ================================================= */
-    /* DOM ELEMENTS                                      */
-    /* ================================================= */
+    // DOM Elements
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
     const chatMessages = document.getElementById('chat-messages');
     const chatHistory = document.querySelector('.chat-history');
+
     const sidebar = document.querySelector('.sidebar');
     const bottomNavIcons = document.querySelectorAll('.bottom-nav i');
 
+    // API Endpoint
     const API_URL = '/api/chat/';
 
     /* ================================================= */
-    /* 💾 LAST TOPIC MEMORY (ADD)                         */
+    /* 🔊 VOICE (TTS) — ADDED WITHOUT REMOVING ANYTHING */
     /* ================================================= */
-    let lastTopic = null;
+    let voiceEnabled = true;
 
-    /* ================================================= */
-    /* 🔄 QUICK QUESTION SENDER (ADD)                     */
-    /* ================================================= */
-    window.sendQuickQuestion = function (text) {
-        userInput.value = text;
-        chatForm.dispatchEvent(
-            new Event('submit', { bubbles: true, cancelable: true })
-        );
+    function speakBot(text) {
+        if (!voiceEnabled) return;
+        if (!window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-IN';
+        utterance.rate = 1;
+        utterance.pitch = 1;
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    window.toggleVoice = () => {
+        voiceEnabled = !voiceEnabled;
+        addMessage('bot', voiceEnabled ? '🔊 Voice enabled' : '🔇 Voice muted');
     };
-
     /* ================================================= */
-    /* 🧠 TOPIC DETECTION (ADD)                           */
-    /* ================================================= */
-    function detectTopic(text) {
-        const t = text.toLowerCase();
 
-        if (t.includes('ai bihari')) return 'ai_bihari';
-        if (t.includes('creator') || t.includes('made you') || t.includes('saurav'))
-            return 'creator';
-        if (t.includes('study') || t.includes('class') || t.includes('exam'))
-            return 'study';
-        if (
-            t.includes('code') ||
-            t.includes('programming') ||
-            t.includes('javascript') ||
-            t.includes('python')
-        )
-            return 'programming';
-        if (t.includes('help') || t.includes('can you')) return 'general_help';
-
-        return lastTopic;
-    }
-
-    /* ================================================= */
-    /* 🔄 DYNAMIC SUGGESTIONS (ADD)                       */
-    /* ================================================= */
-    function getDynamicSuggestions(text) {
-        lastTopic = detectTopic(text);
-
-        if (lastTopic === 'ai_bihari') {
-            return [
-                'Who created AI Bihari?',
-                'Why was AI Bihari created?',
-                'Is AI Bihari free?'
-            ];
-        }
-
-        if (lastTopic === 'creator') {
-            return [
-                'Tell me more about Saurav',
-                'What is AI Bihari?',
-                'How was AI Bihari built?'
-            ];
-        }
-
-        if (lastTopic === 'study') {
-            return [
-                'Help me with Class 11 Physics',
-                'Explain a concept simply',
-                'How should I study effectively?'
-            ];
-        }
-
-        if (lastTopic === 'programming') {
-            return [
-                'Teach me JavaScript basics',
-                'Help me learn Python',
-                'Give me a project idea'
-            ];
-        }
-
-        return [
-            'What is AI Bihari?',
-            'Who made you?',
-            'What can you do?'
-        ];
-    }
-
-    function addSuggestions(messageDiv, suggestions) {
-        const container = document.createElement('div');
-        container.className = 'suggested-questions';
-
-        suggestions.forEach(q => {
-            const chip = document.createElement('div');
-            chip.className = 'question-chip';
-            chip.textContent = q;
-            chip.onclick = () => sendQuickQuestion(q);
-            container.appendChild(chip);
-        });
-
-        messageDiv.appendChild(container);
-    }
-
-    /* ================================================= */
-    /* INIT                                             */
-    /* ================================================= */
     function init() {
         setupEventListeners();
         loadChatHistory();
@@ -120,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupEventListeners() {
         chatForm.addEventListener('submit', handleSubmit);
 
-        userInput.addEventListener('keydown', e => {
+        userInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
@@ -128,9 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ================================================= */
-    /* MAIN SUBMIT HANDLER                               */
-    /* ================================================= */
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -142,25 +63,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const lowerMsg = message.toLowerCase();
 
-        /* ---------- LOCAL COMMANDS ---------- */
+        /* ------------------------------------------------ */
+        /*          LOCAL COMMAND RESPONSES                 */
+        /* ------------------------------------------------ */
 
-        if (lowerMsg.includes('who made you') || lowerMsg.includes('who created you')) {
-            addMessage(
-                'bot',
-                'I was created by Saurav, a Class 11 student passionate about AI and technology.'
-            );
+        if (
+            lowerMsg.includes("who made you") ||
+            lowerMsg.includes("who created you") ||
+            lowerMsg.includes("your creator") ||
+            lowerMsg.includes("who is your developer") ||
+            lowerMsg.includes("who create you") ||
+            lowerMsg.includes("who  creates you") ||
+            lowerMsg.includes("tumko kaun banaya") ||
+            lowerMsg.includes("who is your owner") ||
+            lowerMsg.includes("name your owner")
+        ) {
+            const reply =
+                "I was created by Saurav, a Class 11 student who is passionate about AI, programming, and technology.";
+            addMessage("bot", reply);
+            speakBot(reply);
             return;
         }
 
-        if (lowerMsg.includes('what is ai bihari')) {
-            addMessage(
-                'bot',
-                'AI Bihari is a smart assistant made to help students with learning, technology, and problem solving.'
-            );
+        if (
+            lowerMsg.includes("who is saurav") ||
+            lowerMsg.includes("tell me about saurav") ||
+            lowerMsg.includes("about your creator") ||
+            lowerMsg.includes("ye saurav kaun hai")
+        ) {
+            const reply =
+`Saurav is a Class 11 student from Bihar and the creator of AI Bihari.
+He enjoys learning programming, building AI projects, and exploring new technologies.`;
+            addMessage("bot", reply);
+            speakBot(reply);
             return;
         }
 
-        /* ---------- NORMAL AI FLOW ---------- */
+        if (
+            lowerMsg.includes("saurav details") ||
+            lowerMsg.includes("full details of saurav") ||
+            lowerMsg.includes("creator details")
+        ) {
+            const reply =
+`Here are the details of my creator:
+
+Name: Saurav
+Class: 11
+Village: Palaki Sultani
+Post Office: Guraru
+District: Gaya
+State: Bihar`;
+            addMessage("bot", reply);
+            speakBot(reply);
+            return;
+        }
+
+        if (
+            lowerMsg.includes("who is rishi") ||
+            lowerMsg.includes("rishi kaun hai")
+        ) {
+            const reply =
+                "Rishi is a small boy of Palaki Sultani and a memorable friend of Saurav.";
+            addMessage("bot", reply);
+            speakBot(reply);
+            return;
+        }
+
+        /* ------------------------------------------------ */
+        /*              NORMAL AI FLOW                     */
+        /* ------------------------------------------------ */
 
         const typingIndicator = showTypingIndicator();
 
@@ -176,24 +147,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
             typingIndicator.remove();
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.json();
 
             if (data.reply) {
                 addMessage('bot', data.reply);
+                speakBot(data.reply);
             } else if (data.error) {
                 addMessage('bot', `Error: ${data.error}`);
             }
 
             saveToHistory(message, data.reply || data.error);
+
         } catch (error) {
+            console.error('Error:', error);
             typingIndicator.remove();
             addMessage('bot', 'Sorry, there was an error processing your request.');
         }
     }
 
-    /* ================================================= */
-    /* MESSAGE RENDERING                                */
-    /* ================================================= */
     function addMessage(sender, text) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `${sender}-message message`;
@@ -203,25 +178,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sender === 'user') {
             messageDiv.innerHTML = `
                 <div class="message-content">
-                    <div class="message-text"><p>${formattedText}</p></div>
+                    <div class="message-text">
+                        <p>${formattedText}</p>
+                    </div>
                 </div>
             `;
         } else {
             messageDiv.innerHTML = `
                 <div class="message-content">
-                    <div class="bot-avatar"><i class="fas fa-robot"></i></div>
-                    <div class="message-text"><p>${formattedText}</p></div>
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-text">
+                        <p>${formattedText}</p>
+                    </div>
                 </div>
             `;
         }
 
         chatMessages.appendChild(messageDiv);
-
-        if (sender === 'bot') {
-            const suggestions = getDynamicSuggestions(text);
-            addSuggestions(messageDiv, suggestions);
-        }
-
         scrollToBottom();
         userInput.focus();
     }
@@ -231,9 +206,13 @@ document.addEventListener('DOMContentLoaded', () => {
         typingDiv.className = 'bot-message message';
         typingDiv.innerHTML = `
             <div class="message-content">
-                <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
                 <div class="typing-indicator">
-                    <span></span><span></span><span></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
                 </div>
             </div>
         `;
@@ -246,9 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    /* ================================================= */
-    /* CHAT HISTORY                                     */
-    /* ================================================= */
     function saveToHistory(userMessage, botReply) {
         const history = JSON.parse(localStorage.getItem('tuni_chat_history') || '[]');
 
@@ -259,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (history.length > 20) history.pop();
+
         localStorage.setItem('tuni_chat_history', JSON.stringify(history));
         updateChatHistory(history);
     }
@@ -270,7 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateChatHistory(history) {
         chatHistory.innerHTML = '';
-        if (!history.length) {
+
+        if (history.length === 0) {
             chatHistory.innerHTML = '<p class="empty-history">No chat history yet</p>';
             return;
         }
@@ -278,8 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
         history.forEach(chat => {
             const item = document.createElement('div');
             item.className = 'history-item';
-            item.textContent = chat.user;
-            item.onclick = () => loadConversation(chat);
+
+            const preview = chat.user.length > 50
+                ? chat.user.substring(0, 50) + '...'
+                : chat.user;
+
+            item.innerHTML = `
+                <div class="history-preview">${preview}</div>
+                <div class="history-time">${formatTime(chat.timestamp)}</div>
+            `;
+
+            item.addEventListener('click', () => loadConversation(chat));
             chatHistory.appendChild(item);
         });
     }
@@ -288,11 +275,16 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.innerHTML = '';
         addMessage('user', chat.user);
         addMessage('bot', chat.bot);
+        speakBot(chat.bot);
     }
 
-    /* ================================================= */
-    /* HELPERS                                          */
-    /* ================================================= */
+    function formatTime(timestamp) {
+        return new Date(timestamp).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie) {
@@ -306,16 +298,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return cookieValue;
     }
 
-    /* ================================================= */
-    /* UI HELPERS                                       */
-    /* ================================================= */
+    // UI helpers
     window.toggleSidebar = () => sidebar.classList.toggle('hidden');
     window.toggleDarkMode = () => document.body.classList.toggle('dark-mode');
-
     window.startNewChat = () => {
-        lastTopic = null;
         chatMessages.innerHTML = '';
-        addMessage('bot', 'Hello! 🥰 How can I help you today?');
+        const msg = 'New chat started! How can I help you?';
+        addMessage('bot', msg);
+        speakBot(msg);
     };
 
     bottomNavIcons.forEach(icon => {
