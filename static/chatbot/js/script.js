@@ -113,7 +113,16 @@ Friend: Rishi`
             );
             return;
         }
-
+        if (
+            lowerMsg.includes("what is ai bihari") ||
+            lowerMsg.includes("ai Bihari Kya hai")
+        ) {
+            addMessage(
+                "bot",
+                "Ai Bihari is ai created by developer Saurav of class 11th student .It is so great ai which you help in solving the problem ."
+            );
+            return;
+        }
         /* ------------------------------------------------ */
         /*              NORMAL AI FLOW                     */
         /* ------------------------------------------------ */
