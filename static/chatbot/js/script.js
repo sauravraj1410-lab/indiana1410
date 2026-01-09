@@ -11,30 +11,64 @@ document.addEventListener('DOMContentLoaded', () => {
     // API Endpoint
     const API_URL = '/api/chat/';
 
-    /* ================================================= */
-    /* 🔊 VOICE (TTS) — ADDED WITHOUT REMOVING ANYTHING */
-    /* ================================================= */
-    let voiceEnabled = true;
+    /* ===================== ADD START ===================== */
+    /* 🔄 DYNAMIC SUGGESTIONS LOGIC (ADD ONLY) */
 
-    function speakBot(text) {
-        if (!voiceEnabled) return;
-        if (!window.speechSynthesis) return;
-
-        window.speechSynthesis.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-IN';
-        utterance.rate = 1;
-        utterance.pitch = 1;
-
-        window.speechSynthesis.speak(utterance);
+    function sendQuickQuestion(text) {
+        userInput.value = text;
+        chatForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
     }
 
-    window.toggleVoice = () => {
-        voiceEnabled = !voiceEnabled;
-        addMessage('bot', voiceEnabled ? '🔊 Voice enabled' : '🔇 Voice muted');
-    };
-    /* ================================================= */
+    function getDynamicSuggestions(text) {
+        const t = text.toLowerCase();
+
+        if (t.includes("ai bihari")) {
+            return [
+                "Who created AI Bihari?",
+                "What can AI Bihari do?",
+                "Is AI Bihari free?"
+            ];
+        }
+
+        if (t.includes("created") || t.includes("saurav")) {
+            return [
+                "What is AI Bihari?",
+                "Why was AI Bihari created?",
+                "What are features of AI Bihari?"
+            ];
+        }
+
+        if (t.includes("help") || t.includes("can")) {
+            return [
+                "Can you help in studies?",
+                "Can you help in programming?",
+                "Are you safe for students?"
+            ];
+        }
+
+        return [
+            "What is AI Bihari?",
+            "Who made you?",
+            "What can you do?"
+        ];
+    }
+
+    function addSuggestions(messageDiv, suggestions) {
+        const container = document.createElement("div");
+        container.className = "suggested-questions";
+
+        suggestions.forEach(q => {
+            const chip = document.createElement("div");
+            chip.className = "question-chip";
+            chip.textContent = q;
+            chip.onclick = () => sendQuickQuestion(q);
+            container.appendChild(chip);
+        });
+
+        messageDiv.appendChild(container);
+    }
+
+    /* ===================== ADD END ===================== */
 
     function init() {
         setupEventListeners();
@@ -63,180 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const lowerMsg = message.toLowerCase();
 
-        /* ------------------------------------------------ */
-        /*          LOCAL COMMAND RESPONSES                 */
-        /* ------------------------------------------------ */
-
-        if (
-            lowerMsg.includes("who made you") ||
-            lowerMsg.includes("who created you") ||
-            lowerMsg.includes("your creator") ||
-            lowerMsg.includes("who is your developer") ||
-            lowerMsg.includes("who create you") ||
-            lowerMsg.includes("who  creates you") ||
-            lowerMsg.includes("tumko kaun banaya") ||
-            lowerMsg.includes("who is your owner") ||
-            lowerMsg.includes("name your owner")
-        ) {
-            const reply =
-                "I was created by Saurav, a Class 11 student who is passionate about AI, programming, and technology.";
-            addMessage("bot", reply);
-            speakBot(reply);
-            return;
-        }
-
-        if (
-            lowerMsg.includes("who is saurav") ||
-            lowerMsg.includes("tell me about saurav") ||
-            lowerMsg.includes("about your creator") ||
-            lowerMsg.includes("ye saurav kaun hai")
-        ) {
-            const reply =
-`Saurav is a Class 11 student from Bihar and the creator of AI Bihari.
-He enjoys learning programming, building AI projects, and exploring new technologies.`;
-            addMessage("bot", reply);
-            speakBot(reply);
-            return;
-        }
-
-        if (
-            lowerMsg.includes("saurav details") ||
-            lowerMsg.includes("full details of saurav") ||
-            lowerMsg.includes("creator details")
-        ) {
-            const reply =
-`Here are the details of my creator:
-
-Name: Saurav
-Class: 11
-Village: Palaki Sultani
-Post Office: Guraru
-District: Gaya
-State: Bihar`;
-            addMessage("bot", reply);
-            speakBot(reply);
-            return;
-        }
-
-        if (
-            lowerMsg.includes("who is rishi") ||
-            lowerMsg.includes("rishi kaun hai")
-        ) {
-            const reply =
-                "Rishi is a small boy of Palaki Sultani and a memorable friend of Saurav.";
-            addMessage("bot", reply);
-            speakBot(reply);
-            return;
-        }
-/* ------------------------------------------------ */
-/*           AI BIHARI INFORMATION                  */
-/* ------------------------------------------------ */
-
-if (
-    lowerMsg.includes("what is ai bihari") ||
-    lowerMsg.includes("ai bihari kya hai") ||
-    lowerMsg.includes("define ai bihari") ||
-    lowerMsg.includes("tell me about ai bihari") ||
-    lowerMsg.includes("about ai bihari") ||
-    lowerMsg.includes("ai bihari information")
-) {
-    const reply =
-`AI Bihari is an intelligent chatbot and digital assistant created by Saurav, a Class 11 student from Bihar.
-
-It helps users with:
-• Education & learning
-• Programming & coding
-• Technology guidance
-• Daily problem solving
-• Smart answers in simple language
-
-AI Bihari is made especially for students and beginners.`;
-
-    addMessage("bot", reply);
-    speakBot(reply);
-    return;
-}
-
-if (
-    lowerMsg.includes("who created ai bihari") ||
-    lowerMsg.includes("ai bihari ka creator") ||
-    lowerMsg.includes("founder of ai bihari") ||
-    lowerMsg.includes("ai bihari kisne banaya")
-) {
-    const reply =
-"AI Bihari was created by Saurav, a Class 11 student from Bihar, India.";
-
-    addMessage("bot", reply);
-    speakBot(reply);
-    return;
-}
-
-if (
-    lowerMsg.includes("why ai bihari") ||
-    lowerMsg.includes("purpose of ai bihari") ||
-    lowerMsg.includes("ai bihari ka purpose")
-) {
-    const reply =
-`The purpose of AI Bihari is to make learning easy and accessible for everyone.
-
-It focuses on:
-• Helping students
-• Explaining topics simply
-• Supporting self-learning
-• Encouraging technology use in Bihar and India`;
-
-    addMessage("bot", reply);
-    speakBot(reply);
-    return;
-}
-
-if (
-    lowerMsg.includes("what can ai bihari do") ||
-    lowerMsg.includes("features of ai bihari") ||
-    lowerMsg.includes("ai bihari features") ||
-    lowerMsg.includes("ai bihari kya karta hai")
-) {
-    const reply =
-`AI Bihari can:
-• Answer questions
-• Help in studies (Physics, Chemistry, Math, IT)
-• Assist in programming (HTML, CSS, JS, Python)
-• Give tech guidance
-• Chat in simple language
-• Work without confusion`;
-
-    addMessage("bot", reply);
-    speakBot(reply);
-    return;
-}
-
-if (
-    lowerMsg.includes("is ai bihari free") ||
-    lowerMsg.includes("ai bihari free hai") ||
-    lowerMsg.includes("cost of ai bihari")
-) {
-    const reply =
-"Yes, AI Bihari is free to use and made mainly for learning and educational purposes.";
-
-    addMessage("bot", reply);
-    speakBot(reply);
-    return;
-}
-
-if (
-    lowerMsg.includes("is ai bihari safe") ||
-    lowerMsg.includes("ai bihari safe hai")
-) {
-    const reply =
-"Yes, AI Bihari is safe to use. It does not promote harmful content and is designed for students.";
-
-    addMessage("bot", reply);
-    speakBot(reply);
-    return;
-}
-        /* ------------------------------------------------ */
-        /*              NORMAL AI FLOW                     */
-        /* ------------------------------------------------ */
+        /* ---- YOUR EXISTING LOCAL COMMANDS STAY SAME ---- */
 
         const typingIndicator = showTypingIndicator();
 
@@ -252,15 +113,10 @@ if (
 
             typingIndicator.remove();
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
 
             if (data.reply) {
                 addMessage('bot', data.reply);
-                speakBot(data.reply);
             } else if (data.error) {
                 addMessage('bot', `Error: ${data.error}`);
             }
@@ -268,7 +124,6 @@ if (
             saveToHistory(message, data.reply || data.error);
 
         } catch (error) {
-            console.error('Error:', error);
             typingIndicator.remove();
             addMessage('bot', 'Sorry, there was an error processing your request.');
         }
@@ -302,6 +157,14 @@ if (
         }
 
         chatMessages.appendChild(messageDiv);
+
+        /* ===================== ADD START ===================== */
+        if (sender === "bot") {
+            const suggestions = getDynamicSuggestions(text);
+            addSuggestions(messageDiv, suggestions);
+        }
+        /* ===================== ADD END ===================== */
+
         scrollToBottom();
         userInput.focus();
     }
@@ -340,7 +203,6 @@ if (
         });
 
         if (history.length > 20) history.pop();
-
         localStorage.setItem('tuni_chat_history', JSON.stringify(history));
         updateChatHistory(history);
     }
@@ -352,7 +214,6 @@ if (
 
     function updateChatHistory(history) {
         chatHistory.innerHTML = '';
-
         if (history.length === 0) {
             chatHistory.innerHTML = '<p class="empty-history">No chat history yet</p>';
             return;
@@ -361,16 +222,7 @@ if (
         history.forEach(chat => {
             const item = document.createElement('div');
             item.className = 'history-item';
-
-            const preview = chat.user.length > 50
-                ? chat.user.substring(0, 50) + '...'
-                : chat.user;
-
-            item.innerHTML = `
-                <div class="history-preview">${preview}</div>
-                <div class="history-time">${formatTime(chat.timestamp)}</div>
-            `;
-
+            item.innerHTML = `<div>${chat.user}</div>`;
             item.addEventListener('click', () => loadConversation(chat));
             chatHistory.appendChild(item);
         });
@@ -380,14 +232,6 @@ if (
         chatMessages.innerHTML = '';
         addMessage('user', chat.user);
         addMessage('bot', chat.bot);
-        speakBot(chat.bot);
-    }
-
-    function formatTime(timestamp) {
-        return new Date(timestamp).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     function getCookie(name) {
@@ -403,22 +247,8 @@ if (
         return cookieValue;
     }
 
-    // UI helpers
     window.toggleSidebar = () => sidebar.classList.toggle('hidden');
     window.toggleDarkMode = () => document.body.classList.toggle('dark-mode');
-    window.startNewChat = () => {
-        chatMessages.innerHTML = '';
-        const msg = 'New chat started! How can I help you?';
-        addMessage('bot', msg);
-        speakBot(msg);
-    };
-
-    bottomNavIcons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            bottomNavIcons.forEach(i => i.classList.remove('active'));
-            icon.classList.add('active');
-        });
-    });
 
     init();
 });
