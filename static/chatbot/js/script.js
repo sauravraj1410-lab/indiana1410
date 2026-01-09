@@ -128,7 +128,112 @@ State: Bihar`;
             speakBot(reply);
             return;
         }
+/* ------------------------------------------------ */
+/*           AI BIHARI INFORMATION                  */
+/* ------------------------------------------------ */
 
+if (
+    lowerMsg.includes("what is ai bihari") ||
+    lowerMsg.includes("ai bihari kya hai") ||
+    lowerMsg.includes("define ai bihari") ||
+    lowerMsg.includes("tell me about ai bihari") ||
+    lowerMsg.includes("about ai bihari") ||
+    lowerMsg.includes("ai bihari information")
+) {
+    const reply =
+`AI Bihari is an intelligent chatbot and digital assistant created by Saurav, a Class 11 student from Bihar.
+
+It helps users with:
+• Education & learning
+• Programming & coding
+• Technology guidance
+• Daily problem solving
+• Smart answers in simple language
+
+AI Bihari is made especially for students and beginners.`;
+
+    addMessage("bot", reply);
+    speakBot(reply);
+    return;
+}
+
+if (
+    lowerMsg.includes("who created ai bihari") ||
+    lowerMsg.includes("ai bihari ka creator") ||
+    lowerMsg.includes("founder of ai bihari") ||
+    lowerMsg.includes("ai bihari kisne banaya")
+) {
+    const reply =
+"AI Bihari was created by Saurav, a Class 11 student from Bihar, India.";
+
+    addMessage("bot", reply);
+    speakBot(reply);
+    return;
+}
+
+if (
+    lowerMsg.includes("why ai bihari") ||
+    lowerMsg.includes("purpose of ai bihari") ||
+    lowerMsg.includes("ai bihari ka purpose")
+) {
+    const reply =
+`The purpose of AI Bihari is to make learning easy and accessible for everyone.
+
+It focuses on:
+• Helping students
+• Explaining topics simply
+• Supporting self-learning
+• Encouraging technology use in Bihar and India`;
+
+    addMessage("bot", reply);
+    speakBot(reply);
+    return;
+}
+
+if (
+    lowerMsg.includes("what can ai bihari do") ||
+    lowerMsg.includes("features of ai bihari") ||
+    lowerMsg.includes("ai bihari features") ||
+    lowerMsg.includes("ai bihari kya karta hai")
+) {
+    const reply =
+`AI Bihari can:
+• Answer questions
+• Help in studies (Physics, Chemistry, Math, IT)
+• Assist in programming (HTML, CSS, JS, Python)
+• Give tech guidance
+• Chat in simple language
+• Work without confusion`;
+
+    addMessage("bot", reply);
+    speakBot(reply);
+    return;
+}
+
+if (
+    lowerMsg.includes("is ai bihari free") ||
+    lowerMsg.includes("ai bihari free hai") ||
+    lowerMsg.includes("cost of ai bihari")
+) {
+    const reply =
+"Yes, AI Bihari is free to use and made mainly for learning and educational purposes.";
+
+    addMessage("bot", reply);
+    speakBot(reply);
+    return;
+}
+
+if (
+    lowerMsg.includes("is ai bihari safe") ||
+    lowerMsg.includes("ai bihari safe hai")
+) {
+    const reply =
+"Yes, AI Bihari is safe to use. It does not promote harmful content and is designed for students.";
+
+    addMessage("bot", reply);
+    speakBot(reply);
+    return;
+}
         /* ------------------------------------------------ */
         /*              NORMAL AI FLOW                     */
         /* ------------------------------------------------ */
